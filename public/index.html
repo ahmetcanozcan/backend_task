@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./style.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+    <div class='content'>
+
+      <div class='subscriptions'>
+       <div class="text-center">
+        <div class="subscription-input">
+          <input type="text" v-model="phoneNumber" name="subscription" placeholder="Telefon numaranızı giriniz">
+          <button @click="getUserConfig"> Getir </button>
+        </div>
+       </div>
+        <div class="content-list">
+          <div class="content-item content-header">
+            <div>
+              ID
+            </div>
+            <div>
+              İsim
+            </div>
+            <div>
+              Konum
+            </div>
+            <div>
+              Marka
+            </div>
+            <div>
+            </div>
+          </div>
+          <div v-if="subscriptions?.length == 0" class="no-data">
+            Kayıt Yok
+          </div>
+          <div v-for="(s, i) in subscriptions" class="content-item">
+            <div>
+              {{s.subscriptionId}}
+            </div>  
+            <div>
+              {{ s.fullname }}
+            </div>
+            <div>
+              {{ s.locationName }}
+            </div>
+            <div>
+              {{ s.brand }}
+            </div>
+              <div>
+                <button @click="getSubscriptionOrders(s)"  > Detay > </button>
+              </div>
+          </div>
+        </div>
+      </div>
+
+      <div :class="{overlay: true, active: orders?.length > 0}">
+        <div class="overlay-bg"></div>
+        <div class="overlay-content">
+          
+          <div class="overlay-content-header">
+            <button @click="closeOverlay"> X </button>
+            <span> Abonelik Detayları </span>
+          </div> 
+
+
+          <div class="card sub-info">
+            <div class="name-section">
+              <span class="label"> İsim: </span>
+              {{selectedSubscription?.fullname}}
+            </div>
+
+            <div class="address">
+              <span class="label"> Adres: </span>
+              <span class="address-line">
+                {{selectedSubscription?.address}}
+              </span>
+              <span class="location-line">
+                {{selectedSubscription?.locationName}}</span>
+              <span>{{selectedSubscription?.subCityName}}</span>/<span>{{selectedSubscription?.cityName}}</span>
+            </div>
+
+            <div>
+              <span class="label">Marka:</span> {{selectedSubscription?.brand}}
+            </div>
+
+          </div>
+
+
+          <div class="card">
+            <div class="order-list">
+              <div class="order-item order-header">
+                <div>
+                  Tarih
+                </div>
+                <div>
+                  Tutar
+                </div>
+                <div>
+                  Ödeme
+                </div>
+                <div>
+                  Durum
+                </div>
+              </div>
+              <div v-if="orders?.length == 0" class="no-data">
+                Kayıt Yok
+              </div>
+              <div v-for="(o, i) in orders">
+               <div class="order-item">
+                <div class="date">
+                  {{moment(o.deliveryDate).format('DD/MM/YYYY HH:MM')}}
+                </div>
+                <div>
+                  {{o.totalAmount}}₺
+                </div>
+                <div>
+                  {{o.paymentMethod}}
+                </div>
+                <div>
+                  {{o.status}}
+                </div>
+               </div>
+               <div class='product-list'>
+                  <div
+                    v-for='product in o?.products'
+                    class="product-item">
+                      <span class="quantity">
+                        • {{product.quantity}}
+                      </span>
+                      <span>
+                        adet
+                      </span>
+                      <span>
+                        {{product.product}}
+                      </span>
+                    </div>
+                  </div>
+               </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script>
+
+
+    </script>
+    <script src="./main.js"></script>
+
+</body>
+
+</html>
